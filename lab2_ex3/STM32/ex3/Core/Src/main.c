@@ -167,7 +167,7 @@ void display7SEG (int num, GPIO_TypeDef* LEDa_GPIO_Port, uint16_t LEDa_Pin,
   }
 const int MAX_LED = 4;
 int index_led = 0;
-int led_buffer[4] = {1,2,3,4};
+int led_buffer[4] = {0,6,3,0};
 void update7SEG(int index){
 	switch (index) {
 		case 0:
@@ -366,19 +366,26 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-int counter = 50;
+int counterDOT = 100;
+int counterEN = 10;
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-	counter--;
-	if(counter <= 0){
-		counter=50;
+	counterDOT--;
+	if(counterDOT <= 0){
+		counterDOT=100;
 		HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
 		HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
+	}
+
+	counterEN--;
+	if(counterEN <= 0){
+		counterEN=10;
+		update7SEG(index_led++);
 		if(index_led == MAX_LED){
 			index_led=0;
 		}
-		update7SEG(index_led++);
 	}
+
 
 }
 /* USER CODE END 4 */
